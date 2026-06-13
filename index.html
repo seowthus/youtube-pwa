@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="YouTube">
+    <meta name="theme-color" content="#0f0f0f">
+    <meta name="description" content="YouTube - Xem video không quảng cáo">
+    <title>YouTube</title>
+    <link rel="manifest" href="manifest.json">
+    <link rel="apple-touch-icon" href="icons/icon-180.png">
+    <link rel="apple-touch-icon" sizes="192x192" href="icons/icon-192.png">
+    <link rel="icon" type="image/png" href="icons/icon-32.png" sizes="32x32">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div id="app">
+        <!-- Header -->
+        <header id="main-header">
+            <div class="header-left">
+                <svg class="yt-logo" viewBox="0 0 90 20" width="90" height="20">
+                    <g>
+                        <path d="M27.973 18.064V1.936h2.24l4.655 10.18V1.936h2.147v16.128h-2.147l-4.748-10.458v10.458h-2.147z" fill="#fff"/>
+                        <path d="M14.47 18.336c-.91-.27-1.66-.73-2.24-1.38-.58-.65-.99-1.42-1.22-2.31-.24-.89-.35-1.85-.35-2.87V8.23c0-1.04.13-2 .38-2.88.26-.88.67-1.64 1.25-2.28.58-.64 1.32-1.12 2.24-1.45.91-.33 1.99-.5 3.23-.5 1.2 0 2.27.17 3.2.5.92.33 1.68.81 2.27 1.45.59.64 1.03 1.4 1.32 2.28.29.88.43 1.84.43 2.88v3.55c0 1.02-.13 1.98-.38 2.87-.26.89-.67 1.66-1.25 2.31-.58.65-1.33 1.11-2.27 1.38-.93.27-2.03.41-3.32.41-1.24 0-2.33-.14-3.26-.41zm5.07-2.67c.34-.43.57-.95.69-1.55.12-.6.18-1.26.18-1.97V7.87c0-.71-.06-1.37-.18-1.97-.12-.6-.35-1.08-.69-1.44-.34-.36-.82-.61-1.44-.75-.62-.14-1.35-.21-2.21-.21-.82 0-1.53.07-2.15.22-.62.15-1.1.4-1.45.76-.35.36-.59.84-.72 1.44-.13.6-.2 1.28-.2 2.02v4.27c0 .71.06 1.37.18 1.97.12.6.35 1.1.69 1.52.34.42.82.73 1.44.93.62.2 1.37.3 2.24.3.86 0 1.58-.1 2.18-.3.6-.2 1.06-.51 1.4-.93z" fill="#fff"/>
+                        <path d="M0 0v20h8.29c.48 0 .88-.18 1.2-.53.32-.35.48-.77.48-1.26V1.79c0-.49-.16-.91-.48-1.26C9.17.18 8.77 0 8.29 0H0z" fill="#f00"/>
+                        <path d="M3.54 5.5l3.49 2.21c.52.33.78.74.78 1.22 0 .49-.26.9-.78 1.23l-3.49 2.2V5.5z" fill="#fff"/>
+                    </g>
+                </svg>
+            </div>
+            <div class="header-right">
+                <button id="btn-search-toggle" class="header-btn" aria-label="Tìm kiếm">
+                    <svg viewBox="0 0 24 24" width="24" height="24"><path d="M20.87 20.17l-5.59-5.59A6.96 6.96 0 0017 10c0-3.87-3.13-7-7-7s-7 3.13-7 7 3.13 7 7 7a6.96 6.96 0 004.58-1.72l5.59 5.59.7-.7zM10 16c-3.31 0-6-2.69-6-6s2.69-6 6-6 6 2.69 6 6-2.69 6-6 6z" fill="#fff"/></svg>
+                </button>
+                <button id="btn-cast" class="header-btn" aria-label="Cast">
+                    <svg viewBox="0 0 24 24" width="24" height="24"><path d="M1 18v3h3c0-1.66-1.34-3-3-3zm0-4v2c2.76 0 5 2.24 5 5h2c0-3.87-3.13-7-7-7zm0-4v2a9 9 0 019 9h2c0-6.08-4.93-11-11-11zm20-7H3c-1.1 0-2 .9-2 2v3h2V5h18v14h-7v2h7c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2z" fill="#fff"/></svg>
+                </button>
+                <button id="btn-profile" class="header-btn profile-btn" aria-label="Tài khoản">
+                    <div class="avatar-placeholder">Y</div>
+                </button>
+            </div>
+        </header>
+
+        <!-- Search Bar (hidden by default) -->
+        <div id="search-bar" class="search-bar hidden">
+            <button id="btn-search-back" class="header-btn" aria-label="Quay lại">
+                <svg viewBox="0 0 24 24" width="24" height="24"><path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z" fill="#fff"/></svg>
+            </button>
+            <input type="text" id="search-input" placeholder="Tìm kiếm trên YouTube" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false">
+            <button id="btn-search-submit" class="header-btn" aria-label="Tìm">
+                <svg viewBox="0 0 24 24" width="24" height="24"><path d="M20.87 20.17l-5.59-5.59A6.96 6.96 0 0017 10c0-3.87-3.13-7-7-7s-7 3.13-7 7 3.13 7 7 7a6.96 6.96 0 004.58-1.72l5.59 5.59.7-.7zM10 16c-3.31 0-6-2.69-6-6s2.69-6 6-6 6 2.69 6 6-2.69 6-6 6z" fill="#fff"/></svg>
+            </button>
+        </div>
+
+        <!-- Category Chips -->
+        <div id="category-chips" class="category-chips">
+            <button class="chip active" data-category="trending">Thịnh hành</button>
+            <button class="chip" data-category="music">Âm nhạc</button>
+            <button class="chip" data-category="gaming">Trò chơi</button>
+            <button class="chip" data-category="news">Tin tức</button>
+            <button class="chip" data-category="sports">Thể thao</button>
+            <button class="chip" data-category="movies">Phim</button>
+            <button class="chip" data-category="education">Giáo dục</button>
+        </div>
+
+        <!-- Home View -->
+        <div id="home-view" class="view active">
+            <div id="video-feed" class="video-feed">
+                <!-- Video cards will be inserted here -->
+            </div>
+            <div id="home-loading" class="loading-container">
+                <div class="skeleton-card"></div>
+                <div class="skeleton-card"></div>
+                <div class="skeleton-card"></div>
+                <div class="skeleton-card"></div>
+            </div>
+            <div id="home-error" class="error-container hidden">
+                <svg viewBox="0 0 24 24" width="48" height="48"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z" fill="#aaa"/></svg>
+                <p>Không thể tải video. Nhấn để thử lại.</p>
+                <button id="btn-retry" class="retry-btn">Thử lại</button>
+            </div>
+        </div>
+
+        <!-- Search Results View -->
+        <div id="search-view" class="view">
+            <div id="search-results" class="video-feed"></div>
+            <div id="search-loading" class="loading-container hidden">
+                <div class="skeleton-card"></div>
+                <div class="skeleton-card"></div>
+                <div class="skeleton-card"></div>
+            </div>
+            <div id="search-empty" class="error-container hidden">
+                <p>Không tìm thấy kết quả</p>
+            </div>
+        </div>
+
+        <!-- Player View -->
+        <div id="player-view" class="view">
+            <div id="player-container">
+                <div id="video-player-wrapper">
+                    <iframe id="video-iframe" allowfullscreen allow="autoplay; encrypted-media; picture-in-picture" frameborder="0"></iframe>
+                </div>
+            </div>
+            <div id="player-info">
+                <h1 id="player-title" class="player-title"></h1>
+                <div class="player-meta">
+                    <span id="player-views"></span>
+                    <span class="meta-dot">•</span>
+                    <span id="player-date"></span>
+                </div>
+                <div class="player-actions">
+                    <button class="action-btn">
+                        <svg viewBox="0 0 24 24" width="24" height="24"><path d="M1 21h4V9H1v12zm22-11c0-1.1-.9-2-2-2h-6.31l.95-4.57.03-.32c0-.41-.17-.79-.44-1.06L14.17 1 7.59 7.59C7.22 7.95 7 8.45 7 9v10c0 1.1.9 2 2 2h9c.83 0 1.54-.5 1.84-1.22l3.02-7.05c.09-.23.14-.47.14-.73v-2z" fill="#fff"/></svg>
+                        <span>Thích</span>
+                    </button>
+                    <button class="action-btn">
+                        <svg viewBox="0 0 24 24" width="24" height="24"><path d="M15 5.63L20.66 12 15 18.37V14h-1c-3.96 0-7.14 1-9.75 3.09 1.84-4.07 5.11-6.4 9.89-7.1l.86-.13V5.63M14 3v6C6.22 10.13 3.11 15.33 2 21c2.78-3.97 6.44-6 12-6v6l8-9-8-9z" fill="#fff"/></svg>
+                        <span>Chia sẻ</span>
+                    </button>
+                    <button class="action-btn">
+                        <svg viewBox="0 0 24 24" width="24" height="24"><path d="M14 10H2v2h12v-2zm0-4H2v2h12V6zm4 8v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zM2 16h8v-2H2v2z" fill="#fff"/></svg>
+                        <span>Lưu</span>
+                    </button>
+                </div>
+                <div class="channel-info">
+                    <div class="channel-avatar" id="channel-avatar">C</div>
+                    <div class="channel-details">
+                        <span class="channel-name" id="channel-name"></span>
+                        <span class="channel-subs" id="channel-subs"></span>
+                    </div>
+                    <button class="subscribe-btn">ĐĂNG KÝ</button>
+                </div>
+            </div>
+            <!-- Swipe up indicator -->
+            <div id="suggestion-indicator" class="suggestion-indicator">
+                <div class="swipe-line"></div>
+                <span>Vuốt lên để xem video gợi ý</span>
+            </div>
+            <!-- Related Videos -->
+            <div id="related-videos" class="related-videos">
+                <h2 class="related-title">Video gợi ý</h2>
+                <div id="related-feed" class="video-feed"></div>
+                <div id="related-loading" class="loading-container">
+                    <div class="skeleton-card-sm"></div>
+                    <div class="skeleton-card-sm"></div>
+                    <div class="skeleton-card-sm"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Bottom Navigation -->
+        <nav id="bottom-nav" class="bottom-nav">
+            <button class="nav-item active" data-view="home">
+                <svg viewBox="0 0 24 24" width="24" height="24"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z" fill="currentColor"/></svg>
+                <span>Trang chủ</span>
+            </button>
+            <button class="nav-item" data-view="explore">
+                <svg viewBox="0 0 24 24" width="24" height="24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.39z" fill="currentColor"/></svg>
+                <span>Khám phá</span>
+            </button>
+            <button class="nav-item nav-create" data-view="create">
+                <div class="create-icon">
+                    <svg viewBox="0 0 24 24" width="24" height="24"><path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z" fill="#0f0f0f"/></svg>
+                </div>
+            </button>
+            <button class="nav-item" data-view="subs">
+                <svg viewBox="0 0 24 24" width="24" height="24"><path d="M4 6H2v14c0 1.1.9 2 2 2h14v-2H4V6zm16-4H8c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm-8 12.5v-9l6 4.5-6 4.5z" fill="currentColor"/></svg>
+                <span>Đăng ký</span>
+            </button>
+            <button class="nav-item" data-view="library">
+                <svg viewBox="0 0 24 24" width="24" height="24"><path d="M4 6H2v14c0 1.1.9 2 2 2h14v-2H4V6zm16-4H8c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm0 14H8V4h12v12zM12 5.5v9l6-4.5z" fill="currentColor"/></svg>
+                <span>Thư viện</span>
+            </button>
+        </nav>
+
+        <!-- Loading Overlay -->
+        <div id="loading-overlay" class="loading-overlay hidden">
+            <div class="yt-spinner">
+                <div class="spinner-ring"></div>
+            </div>
+        </div>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>
