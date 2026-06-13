@@ -11,14 +11,15 @@
     // Configuration
     // ============================================
     var INVIDIOUS_INSTANCES = [
+        'https://invidious.materialio.us',
+        'https://invidious.protokolla.fi',
         'https://inv.nadeko.net',
-        'https://invidious.nerdvpn.de',
         'https://yewtu.be',
+        'https://invidious.nerdvpn.de',
         'https://vid.puffyan.us',
         'https://invidious.fdn.fr',
         'https://iv.melmac.space',
         'https://invidious.privacyredirect.com',
-        'https://invidious.protokolla.fi',
         'https://inv.tux.pizza',
         'https://invidious.perennialte.ch'
     ];
@@ -70,44 +71,54 @@
             var self = this;
             showToast('Đang tìm server...');
             
-            // Try Invidious instances first
-            var promises = INVIDIOUS_INSTANCES.map(function(inst) {
-                return self.testInstance(inst, 'invidious').then(function(ok) {
-                    if (ok) return { url: inst, type: 'invidious' };
-                    return null;
-                });
-            });
-
-            return Promise.all(promises).then(function(results) {
-                for (var i = 0; i < results.length; i++) {
-                    if (results[i]) {
-                        state.currentInstance = results[i].url;
-                        state.instanceType = results[i].type;
-                        localStorage.setItem('yt_instance', results[i].url);
-                        localStorage.setItem('yt_instance_type', results[i].type);
-                        showToast('Đã kết nối!');
-                        return;
-                    }
-                }
-                // Try Piped instances
-                var pipedPromises = PIPED_INSTANCES.map(function(inst) {
-                    return self.testInstance(inst, 'piped').then(function(ok) {
-                        if (ok) return { url: inst, type: 'piped' };
-                        return null;
+            // Race approach: first working instance wins
+            function raceInstances(instances, type) {
+                return new Promise(function(resolve) {
+                    var resolved = false;
+                    var failCount = 0;
+                    var total = instances.length;
+                    
+                    instances.forEach(function(inst) {
+                        self.testInstance(inst, type).then(function(ok) {
+                            if (ok && !resolved) {
+                                resolved = true;
+                                resolve({ url: inst, type: type });
+                            } else {
+                                failCount++;
+                                if (failCount >= total && !resolved) {
+                                    resolve(null);
+                                }
+                            }
+                        }).catch(function() {
+                            failCount++;
+                            if (failCount >= total && !resolved) {
+                                resolve(null);
+                            }
+                        });
                     });
                 });
-                return Promise.all(pipedPromises).then(function(pipedResults) {
-                    for (var j = 0; j < pipedResults.length; j++) {
-                        if (pipedResults[j]) {
-                            state.currentInstance = pipedResults[j].url;
-                            state.instanceType = pipedResults[j].type;
-                            localStorage.setItem('yt_instance', pipedResults[j].url);
-                            localStorage.setItem('yt_instance_type', pipedResults[j].type);
-                            showToast('Đã kết nối!');
-                            return;
-                        }
+            }
+
+            return raceInstances(INVIDIOUS_INSTANCES, 'invidious').then(function(result) {
+                if (result) {
+                    state.currentInstance = result.url;
+                    state.instanceType = result.type;
+                    localStorage.setItem('yt_instance', result.url);
+                    localStorage.setItem('yt_instance_type', result.type);
+                    showToast('Đã kết nối!');
+                    return;
+                }
+                // Try Piped instances as fallback
+                return raceInstances(PIPED_INSTANCES, 'piped').then(function(pipedResult) {
+                    if (pipedResult) {
+                        state.currentInstance = pipedResult.url;
+                        state.instanceType = pipedResult.type;
+                        localStorage.setItem('yt_instance', pipedResult.url);
+                        localStorage.setItem('yt_instance_type', pipedResult.type);
+                        showToast('Đã kết nối!');
+                    } else {
+                        showToast('Không tìm thấy server khả dụng');
                     }
-                    showToast('Không tìm thấy server khả dụng');
                 });
             });
         },
@@ -115,7 +126,19 @@
         testInstance: function(url, type) {
             var endpoint = type === 'invidious' ? '/api/v1/trending?region=VN' : '/trending?region=VN';
             return this.fetchWithTimeout(url + endpoint, this.fetchTimeout)
-                .then(function(resp) { return resp.ok; })
+                .then(function(resp) {
+                    if (!resp.ok) return false;
+                    return resp.text().then(function(text) {
+                        // Verify it's actual JSON data, not a captcha page
+                        try {
+                            var data = JSON.parse(text);
+                            if (Array.isArray(data) && data.length > 0) return true;
+                            return false;
+                        } catch(e) {
+                            return false;
+                        }
+                    });
+                })
                 .catch(function() { return false; });
         },
 
