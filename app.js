@@ -682,6 +682,11 @@
         playVideo: function(videoId) {
             state.currentVideoId = videoId;
             
+            // Push history state for back navigation
+            if (window.history && window.history.pushState) {
+                window.history.pushState({ view: 'player', videoId: videoId }, '', '');
+            }
+            
             // Show player view
             UI.showView('player');
             
