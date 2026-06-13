@@ -2,7 +2,7 @@
     "name": "YouTube",
     "short_name": "YouTube",
     "description": "YouTube - Xem video không quảng cáo",
-    "start_url": "/",
+    "start_url": "./",
     "display": "standalone",
     "background_color": "#0f0f0f",
     "theme_color": "#0f0f0f",
